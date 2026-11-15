@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Иконки для PWA</title>
+<style>
+  body { background: #111; color: #fff; font-family: monospace; padding: 20px; text-align: center; }
+  canvas { background: #000; border: 2px solid #333; margin: 10px; image-rendering: pixelated; }
+  a { color: #0f0; display: inline-block; margin: 10px; font-size: 18px; font-weight: bold; }
+</style>
+</head>
+<body>
+  <h2>Твои иконки готовы</h2>
+  <p>Нажми на ссылки ниже, чтобы скачать (на телефоне откроется картинка — зажми её и выбери "Сохранить изображение").</p>
+  
+  <div>
+    <canvas id="c192" width="192" height="192"></canvas>
+    <br>
+    <a id="dl192" download="icon-192.png" href="#">Скачать 192x192</a>
+  </div>
+
+  <div>
+    <canvas id="c512" width="512" height="512"></canvas>
+    <br>
+    <a id="dl512" download="icon-512.png" href="#">Скачать 512x512</a>
+  </div>
+
+<script>
+  // Функция для рисования иконки (дизеринг + пиксели)
+  function drawIcon(canvasId, size) {
+    const c = document.getElementById(canvasId);
+    const ctx = c.getContext('2d');
+    
+    // Фон
+    ctx.fillStyle = '#111';
+    ctx.fillRect(0, 0, size, size);
+
+    // Рисуем крупные пиксели (дизеринг)
+    const cellSize = size / 8; // 8x8 сетка
+    ctx.fillStyle = '#0f0'; // Зеленый цвет, как в статус-баре
+
+    for (let y = 0; y < 8; y++) {
+      for (let x = 0; x < 8; x++) {
+        // Рисуем квадрат, если выпадает "шанс"
+        if (Math.random() > 0.4) {
+          ctx.fillRect(x * cellSize, y * cellSize, cellSize - 2, cellSize - 2);
+        }
+      }
+    }
+    
+    // Рамка
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = size / 20;
+    ctx.strokeRect(0, 0, size, size);
+
+    // Текст "MP" по центру
+    ctx.fillStyle = '#fff';
+    ctx.font = `bold ${size / 4}px monospace`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('MP', size/2, size/2);
+  }
+
+  // Рисуем иконки
+  drawIcon('c192', 192);
+  drawIcon('c512', 512);
+
+  // Конвертируем в PNG и вешаем на ссылки
+  document.getElementById('dl192').href = document.getElementById('c192').toDataURL('image/png');
+  document.getElementById('dl512').href = document.getElementById('c512').toDataURL('image/png');
+</script>
+</body>
+</html>
